@@ -19,13 +19,8 @@ import webapp2
 from google.appengine.api import images
 from google.appengine.ext import blobstore
 
-secretphrase = "thisisyoursecretphrase"
-
 class MainHandler(webapp2.RequestHandler):
     def get(self, siteName, imageFile):
-        if secretphrase != self.request.get('secret_phrase'):
-          return
-
         filename = '/gs/' + siteName + '/webhook-uploads/' + imageFile;
 
         key = blobstore.create_gs_key(filename)

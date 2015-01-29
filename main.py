@@ -29,6 +29,18 @@ class MainHandler(webapp2.RequestHandler):
 
         self.response.out.write(url);
 
+class NewHandler(webapp2.RequestHandler):
+    def get(self, siteName, timestamp, imageFile):
+        print imageFile
+        filename = '/gs/' + siteName + '/webhook-uploads/' + timestamp + '/' + imageFile;
+
+        key = blobstore.create_gs_key(filename)
+        img = images.Image(blob_key=key)
+        url = images.get_serving_url(key)
+
+        self.response.out.write(url);
+
 app = webapp2.WSGIApplication([
     webapp2.Route(r'/<siteName>/webhook-uploads/<imageFile>', handler=MainHandler, name='main'),
+    webapp2.Route(r'/<siteName>/webhook-uploads/<timestamp>/<imageFile>', handler=NewHandler, name='main'),
 ], debug=False)
